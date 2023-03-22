@@ -15,17 +15,14 @@ const plaidClient = new PlaidApi(configuration);
 
 module.exports = {
   createLinkToken: async (request, response) => {
-    //   Get the client_user_id by searching for the current user
-    //   const user = await User.find(...);
-    //   const clientUserId = user.id;
-    const clientUserId = "user";
+    //   Get the client_user_id by searching for the current user);
+    const clientUserId = request.body.id;
     const plaidRequest = {
       user: {
-        // This should correspond to a unique id for the current user.
         client_user_id: clientUserId,
       },
       client_name: "Plaid Test App",
-      products: ["auth"],
+      products: ["transactions", "auth"],
       language: "en",
       redirect_uri: "http://localhost:5173/",
       country_codes: ["US"],
@@ -41,15 +38,24 @@ module.exports = {
     }
   },
   exchangePublicToken: async (request, response) => {
-    const publicToken = request.body.public_token;
+    const { public_token, id } = request.body;
     try {
       const plaidResponse = await plaidClient.itemPublicTokenExchange({
-        public_token: publicToken,
+        public_token: public_token,
       });
       // These values should be saved to a persistent database and
       // associated with the currently signed-in user
-      const accessToken = plaidResponse.data.access_token;
-      response.json({ accessToken });
+      const { access_token, item_id } = plaidResponse.data;
+      console.log("ran");
+      await User.findByIdAndUpdate(id, {
+        $push: {
+          items: {
+            item_id: item_id,
+            access_token: access_token,
+          },
+        },
+      });
+      res.status(200).json({ message: "Item Linked" });
     } catch (error) {
       response.status(500).send("failed");
     }

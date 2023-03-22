@@ -8,6 +8,7 @@ const Auth = ({ publicToken, user }) => {
       try {
         let accessToken = await axios.post("api/exchange_public_token", {
           public_token: publicToken,
+          id: user._id,
         });
         // console.log(accessToken)
 

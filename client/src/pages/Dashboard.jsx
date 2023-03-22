@@ -13,7 +13,9 @@ const Dashboard = ({ user }) => {
   //creating link token to plaid api
   useEffect(() => {
     async function fetch() {
-      const response = await axios.post("api/create_link_token");
+      const response = await axios.post("api/create_link_token", {
+        id: user._id,
+      });
       setLinkToken(response.data.link_token);
     }
     fetch();
