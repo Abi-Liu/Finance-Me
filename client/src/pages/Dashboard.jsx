@@ -1,32 +1,49 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Link, Route, Routes, Navigate } from "react-router-dom";
+import Transactions from "../components/Transactions";
 import axios from "axios";
 import { usePlaidLink } from "react-plaid-link";
-import Auth from "../components/Auth";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
 const Dashboard = ({ user }) => {
   const [linkToken, setLinkToken] = useState();
-  const [publicToken, setPublicToken] = useState();
-
+  const [account, setAccount] = useState();
+  console.log(account);
+  useEffect(() => {
+    async function fetchAccounts() {
+      const accounts = await axios.get(`/api/accounts/${user._id}`);
+      setAccount(accounts.data);
+    }
+    fetchAccounts();
+  }, []);
   //creating link token to plaid api
   useEffect(() => {
     async function fetch() {
-      const response = await axios.post("api/create_link_token", {
+      const response = await axios.post("/api/create_link_token", {
         id: user._id,
       });
       setLinkToken(response.data.link_token);
+      console.log(response);
     }
     fetch();
-  }, []);
+  }, [account]);
 
   const { open, ready } = usePlaidLink({
     token: linkToken,
     onSuccess: (public_token, metadata) => {
-      setPublicToken(public_token);
-      console.log("success", public_token, metadata);
-      // send public_token to server
+      async function setData() {
+        try {
+          let userAccount = await axios.post("/api/exchange_public_token", {
+            public_token: public_token,
+            id: user._id,
+            metadata: metadata,
+          });
+          setAccount((prev) => [...prev, userAccount.data]);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      setData();
     },
   });
 
@@ -35,7 +52,11 @@ const Dashboard = ({ user }) => {
       <button onClick={() => open()} disabled={!ready}>
         Connect a bank account
       </button>
-      {publicToken && <Auth publicToken={publicToken} user={user} />}
+      {account ? (
+        <Transactions user={user} account={account} />
+      ) : (
+        <h3>Link a Bank Account to Get Started</h3>
+      )}
     </div>
   );
 };

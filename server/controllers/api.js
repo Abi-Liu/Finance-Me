@@ -1,5 +1,7 @@
 const { Configuration, PlaidApi, PlaidEnvironments } = require("plaid");
 const User = require("../models/User");
+const Account = require("../models/Account");
+const moment = require("moment");
 
 const configuration = new Configuration({
   basePath: PlaidEnvironments.sandbox,
@@ -39,6 +41,7 @@ module.exports = {
   },
   exchangePublicToken: async (request, response) => {
     const { public_token, id } = request.body;
+    const { name, institution_id } = request.body.metadata.institution;
     try {
       const plaidResponse = await plaidClient.itemPublicTokenExchange({
         public_token: public_token,
@@ -46,18 +49,42 @@ module.exports = {
       // These values should be saved to a persistent database and
       // associated with the currently signed-in user
       const { access_token, item_id } = plaidResponse.data;
-      console.log("ran");
-      await User.findByIdAndUpdate(id, {
-        $push: {
-          items: {
-            item_id: item_id,
-            access_token: access_token,
-          },
-        },
+
+      let account = await Account.findOne({
+        userId: id,
+        institutionId: institution_id,
       });
-      res.status(200).json({ message: "Item Linked" });
+      if (account) {
+        console.log("Account already exists");
+      } else {
+        account = await Account.create({
+          userId: id,
+          accessToken: access_token,
+          itemId: item_id,
+          institutionId: institution_id,
+          institutionName: name,
+        });
+      }
+      response.json(account);
     } catch (error) {
       response.status(500).send("failed");
+    }
+  },
+  deleteAccount: async (request, response) => {
+    try {
+      await Account.remove({ _id: request.params.id });
+      response.json({ message: "Successfully deleted" });
+    } catch (err) {
+      console.log(err);
+      response.status(500).json({ message: err });
+    }
+  },
+  getAccounts: async (request, response) => {
+    try {
+      const accounts = await Account.find({ userId: request.params.id });
+      response.json(accounts);
+    } catch (err) {
+      response.status(500).json({ message: err });
     }
   },
   auth: async (request, response) => {
@@ -74,39 +101,30 @@ module.exports = {
   },
   transactions: async (request, response) => {
     try {
-      // Set cursor to empty to receive all historical updates
-      let cursor = null;
-      // New transaction updates since "cursor"
-      let added = [];
-      let modified = [];
-      // Removed transaction ids
-      let removed = [];
-      let hasMore = true;
-      // Iterate through each page of new transaction updates for item
-      while (hasMore) {
-        const request = {
-          access_token: ACCESS_TOKEN,
-          cursor: cursor,
+      const now = moment();
+      const today = now.format("YYYY-MM-DD");
+      const thirtyDaysAgo = now.subtract(30, "days").format("YYYY-MM-DD");
+      let transactions = [];
+      const items = request.body.account;
+      items.forEach((item) => {
+        let accessToken = item.accessToken;
+        let institutionName = item.institutionName;
+        const req = {
+          access_token: accessToken,
+          start_date: thirtyDaysAgo,
+          end_date: today,
         };
-        const response = await client.transactionsSync(request);
-        const data = response.data;
-        // Add this page of results
-        added = added.concat(data.added);
-        modified = modified.concat(data.modified);
-        removed = removed.concat(data.removed);
-        hasMore = data.has_more;
-        // Update cursor to the next cursor
-        cursor = data.next_cursor;
-      }
-      const compareTxnsByDateAscending = (a, b) =>
-        (a.date > b.date) - (a.date < b.date);
-      // Return the 8 most recent transactions
-      const recently_added = [...added]
-        .sort(compareTxnsByDateAscending)
-        .slice(-8);
-      response.json({ latest_transactions: recently_added });
+        plaidClient.transactionsGet(req).then((res) => {
+          // console.log(res.data.transactions[0]);
+          // transactions.push({
+          //   accountName: institutionName,
+          //   transactions: res.data.transactions,
+          // });
+        });
+      });
+      response.json({ message: "transactions" });
     } catch (err) {
-      console.error(err);
+      response.status(500).json({ message: "Could not fetch transaction" });
     }
   },
 };
