@@ -116,10 +116,11 @@ module.exports = {
         };
         plaidClient.transactionsGet(req).then((res) => {
           // console.log(res.data.transactions[0]);
-          // transactions.push({
-          //   accountName: institutionName,
-          //   transactions: res.data.transactions,
-          // });
+          console.log("1");
+          transactions.push({
+            accountName: institutionName,
+            transactions: res.data.transactions,
+          });
         });
       });
       response.json({ message: "transactions" });

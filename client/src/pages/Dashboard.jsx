@@ -8,24 +8,35 @@ axios.defaults.baseURL = "http://localhost:8000";
 const Dashboard = ({ user }) => {
   const [linkToken, setLinkToken] = useState();
   const [account, setAccount] = useState();
-  console.log(account);
   useEffect(() => {
+    let ignore = false;
+
     async function fetchAccounts() {
       const accounts = await axios.get(`/api/accounts/${user._id}`);
-      setAccount(accounts.data);
+      if (!ignore) {
+        setAccount(accounts.data);
+      }
     }
     fetchAccounts();
+    return () => (ignore = true);
   }, []);
+
   //creating link token to plaid api
   useEffect(() => {
+    let ignore = false;
+
     async function fetch() {
       const response = await axios.post("/api/create_link_token", {
         id: user._id,
       });
-      setLinkToken(response.data.link_token);
-      console.log(response);
+      if (!ignore) {
+        setLinkToken(response.data.link_token);
+        console.log(response);
+      }
     }
     fetch();
+
+    return () => (ignore = true);
   }, [account]);
 
   const { open, ready } = usePlaidLink({
