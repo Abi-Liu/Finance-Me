@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Transactions from "../components/Transactions";
 import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 import axios from "axios";
 import { usePlaidLink } from "react-plaid-link";
 import { Container, Box, Button, AppBar, Stack } from "@mui/material";
@@ -62,7 +63,7 @@ const Dashboard = ({ user }) => {
 
   return (
     <Container>
-      <Header user={user} />
+      <Sidebar user={user} />
       <Box mt={4}>
         <Button variant="contained" onClick={() => open()} disabled={!ready}>
           Connect a bank account

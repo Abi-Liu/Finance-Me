@@ -28,7 +28,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* <Navbar user = {user}/> */}
+      {/* <Navbar user={user} /> */}
       <Routes>
         <Route
           path="/"
