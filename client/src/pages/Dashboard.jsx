@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import Transactions from "../components/Transactions";
+import Header from "../components/Header";
 import axios from "axios";
 import { usePlaidLink } from "react-plaid-link";
+import { Container, Box, Button, AppBar, Stack } from "@mui/material";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
@@ -59,16 +61,19 @@ const Dashboard = ({ user }) => {
   });
 
   return (
-    <div>
-      <button onClick={() => open()} disabled={!ready}>
-        Connect a bank account
-      </button>
-      {account ? (
-        <Transactions user={user} account={account} />
-      ) : (
-        <h3>Link a Bank Account to Get Started</h3>
-      )}
-    </div>
+    <Container>
+      <Header user={user} />
+      <Box mt={4}>
+        <Button variant="contained" onClick={() => open()} disabled={!ready}>
+          Connect a bank account
+        </Button>
+        {account ? (
+          <Transactions user={user} account={account} />
+        ) : (
+          <h3>Link a Bank Account to Get Started</h3>
+        )}
+      </Box>
+    </Container>
   );
 };
 

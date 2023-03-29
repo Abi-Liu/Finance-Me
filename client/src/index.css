@@ -4,3 +4,7 @@
   box-sizing: border-box;
   font-family: "Roboto";
 }
+
+.logo {
+  width: 20rem;
+}

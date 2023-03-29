@@ -16,6 +16,8 @@ const Table = ({ transactions }) => {
     });
   });
 
+  const sorted = data.sort((a, b) => (b.date > a.date ? 1 : -1));
+
   const columns = useMemo(
     () => [
       {
@@ -41,11 +43,8 @@ const Table = ({ transactions }) => {
     ],
     []
   );
-  return (
-    <Container sx={{ mt: 5 }}>
-      <MaterialReactTable columns={columns} data={data} />;
-    </Container>
-  );
+
+  return <MaterialReactTable columns={columns} data={sorted} />;
 };
 
 export default Table;
