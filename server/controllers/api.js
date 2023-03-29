@@ -106,7 +106,7 @@ module.exports = {
       const thirtyDaysAgo = now.subtract(30, "days").format("YYYY-MM-DD");
       let transactions = [];
       const items = request.body.account;
-      items.forEach((item) => {
+      const requests = items.map(async (item) => {
         let accessToken = item.accessToken;
         let institutionName = item.institutionName;
         const req = {
@@ -114,16 +114,37 @@ module.exports = {
           start_date: thirtyDaysAgo,
           end_date: today,
         };
-        plaidClient.transactionsGet(req).then((res) => {
-          // console.log(res.data.transactions[0]);
-          console.log("1");
-          transactions.push({
-            accountName: institutionName,
-            transactions: res.data.transactions,
-          });
+        const res = await plaidClient.transactionsGet(req);
+        transactions.push({
+          accountName: institutionName,
+          transactions: res.data.transactions,
+          totalTransactions: res.data.total_transactions,
         });
       });
-      response.json({ message: "transactions" });
+      // requests is an array of promises. Wait for all of them to complete:
+      await Promise.all(requests);
+      response.json(transactions);
+      console.log(transactions);
+      // transactions is now full.
+
+      // items.forEach((item) => {
+      //   let accessToken = item.accessToken;
+      //   let institutionName = item.institutionName;
+      //   const req = {
+      //     access_token: accessToken,
+      //     start_date: thirtyDaysAgo,
+      //     end_date: today,
+      //   };
+      //   plaidClient.transactionsGet(req).then((res) => {
+      //     transactions.push({
+      //       accountName: institutionName,
+      //       transactions: res.data.transactions,
+      //     });
+      //     if (transactions.length === items.length) {
+      //       response.json(transactions);
+      //     }
+      //   });
+      // });
     } catch (err) {
       response.status(500).json({ message: "Could not fetch transaction" });
     }
