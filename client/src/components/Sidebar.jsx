@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import { Stack, Avatar } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -16,8 +17,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import { Dashboard, Logout, AttachMoney } from "@mui/icons-material";
+import logo from "../assets/Logo.png";
 
 const drawerWidth = 220;
 
@@ -86,7 +87,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer({ user }) {
+const Sidebar = ({ user, history }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -102,6 +103,22 @@ export default function MiniDrawer({ user }) {
     window.open("http://localhost:8000/auth/logout", "_self");
   }
 
+  const navigate = useNavigate();
+
+  const items = [
+    {
+      text: "Overview",
+      icon: <Dashboard />,
+      click: () => navigate("/dashboard"),
+    },
+    {
+      text: "Transactions",
+      icon: <AttachMoney />,
+      click: () => navigate("/random"),
+    },
+    { text: "Logout", icon: <Logout />, click: logout },
+  ];
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar elevation={1} position="fixed" open={open}>
@@ -112,18 +129,21 @@ export default function MiniDrawer({ user }) {
             justifyContent: "space-between",
           }}
         >
-          <IconButton
-            color="#707070"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          <Stack direction="row" alignItems="center" justifyContent="center">
+            <IconButton
+              color="#707070"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <img className="logo-small" src={logo} alt="" />
+          </Stack>
           <Stack
             direction="row"
             gap="16px"
@@ -149,29 +169,36 @@ export default function MiniDrawer({ user }) {
         </DrawerHeader>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                onClick={logout}
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
+          {items.map((item, index) => {
+            const { text, icon, click } = item;
+            return (
+              <ListItem
+                onClick={click}
+                key={text}
+                disablePadding
+                sx={{ display: "block" }}
               >
-                <ListItemIcon
+                <ListItemButton
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {icon}
+                  </ListItemIcon>
+                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -179,4 +206,6 @@ export default function MiniDrawer({ user }) {
       </Box>
     </Box>
   );
-}
+};
+
+export default Sidebar;

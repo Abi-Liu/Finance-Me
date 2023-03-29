@@ -64,7 +64,7 @@ const Dashboard = ({ user }) => {
   return (
     <Container>
       <Sidebar user={user} />
-      <Box mt={4}>
+      <Box sx={{ mb: 5 }}>
         <Button variant="contained" onClick={() => open()} disabled={!ready}>
           Connect a bank account
         </Button>

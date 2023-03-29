@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Random from "./pages/Random";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
@@ -33,14 +34,18 @@ function App() {
         <Route
           path="/"
           element={!user ? <Home /> : <Navigate to="/dashboard" />}
-        ></Route>
+        />
         <Route
           path="/login"
           element={!user ? <Login /> : <Navigate to="/dashboard" />}
-        ></Route>
+        />
         <Route
           path="/dashboard"
           element={user ? <Dashboard user={user} /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/random"
+          element={user ? <Random user={user} /> : <Navigate to="/" />}
         />
       </Routes>
     </BrowserRouter>
