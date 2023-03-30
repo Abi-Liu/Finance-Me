@@ -57,6 +57,22 @@ function App() {
     return () => (ignore = true);
   }, [account]);
 
+  let data = [];
+
+  transactions.forEach((account) => {
+    account.transactions.forEach((transaction) => {
+      data.push({
+        account: account.accountName,
+        date: transaction.date,
+        category: transaction.category[0],
+        name: transaction.name,
+        amount: transaction.amount,
+      });
+    });
+  });
+
+  data.sort((a, b) => (b.date > a.date ? 1 : -1));
+
   return (
     <BrowserRouter>
       <Routes>
@@ -75,7 +91,7 @@ function App() {
               <Dashboard
                 user={user}
                 account={account}
-                transactions={transactions}
+                transactions={data}
                 setAccount={setAccount}
               />
             ) : (
@@ -91,6 +107,7 @@ function App() {
                 user={user}
                 account={account}
                 transactions={transactions}
+                data={data}
               />
             ) : (
               <Navigate to="/" />

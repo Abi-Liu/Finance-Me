@@ -6,7 +6,7 @@ import { Box, Typography, Container } from "@mui/material";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
-const Transactions = ({ user, account, transactions }) => {
+const Transactions = ({ user, account, transactions, data }) => {
   // const [transactions, setTransactions] = useState([]);
   // const [account, setAccount] = useState();
 
@@ -50,7 +50,7 @@ const Transactions = ({ user, account, transactions }) => {
               You have {total} transactions from your {transactions.length} bank{" "}
               {transactions.length === 1 ? "account" : "accounts"}
             </Typography>
-            <Table transactions={transactions} />
+            <Table transactions={data} />
           </Box>
         ) : (
           <h4>Fetching transactions</h4>

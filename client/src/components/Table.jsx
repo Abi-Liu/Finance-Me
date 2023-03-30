@@ -3,20 +3,20 @@ import MaterialReactTable from "material-react-table";
 import { Container } from "@mui/material";
 
 const Table = ({ transactions }) => {
-  let data = [];
-  transactions.forEach((account) => {
-    account.transactions.forEach((transaction) => {
-      data.push({
-        account: account.accountName,
-        date: transaction.date,
-        category: transaction.category[0],
-        name: transaction.name,
-        amount: transaction.amount,
-      });
-    });
-  });
+  // let data = [];
+  // transactions.forEach((account) => {
+  //   account.transactions.forEach((transaction) => {
+  //     data.push({
+  //       account: account.accountName,
+  //       date: transaction.date,
+  //       category: transaction.category[0],
+  //       name: transaction.name,
+  //       amount: transaction.amount,
+  //     });
+  //   });
+  // });
 
-  const sorted = data.sort((a, b) => (b.date > a.date ? 1 : -1));
+  // const sorted = data.sort((a, b) => (b.date > a.date ? 1 : -1));
 
   const columns = useMemo(
     () => [
@@ -44,7 +44,7 @@ const Table = ({ transactions }) => {
     []
   );
 
-  return <MaterialReactTable columns={columns} data={sorted} />;
+  return <MaterialReactTable columns={columns} data={transactions} />;
 };
 
 export default Table;
