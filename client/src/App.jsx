@@ -6,12 +6,15 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import Random from "./pages/Random";
+import Random from "./pages/Transactions";
+import Transactions from "./pages/Transactions";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  const [account, setAccount] = useState();
 
   useEffect(() => {
     const getUser = async () => {
@@ -27,9 +30,35 @@ function App() {
     getUser();
   }, []);
 
+  //Get accounts linked to user
+  useEffect(() => {
+    let ignore = false;
+
+    async function fetchAccounts() {
+      const accounts = await axios.get(`/api/accounts/${user._id}`);
+      if (!ignore) {
+        setAccount(accounts.data);
+      }
+    }
+    fetchAccounts();
+    return () => (ignore = true);
+  }, [user]);
+
+  //Get transactions linked to user's bank accounts
+  useEffect(() => {
+    let ignore = false;
+    async function fetchTransactions() {
+      const response = await axios.post("/api/transactions", { account });
+      if (!ignore) {
+        setTransactions(response.data);
+      }
+    }
+    fetchTransactions();
+    return () => (ignore = true);
+  }, [account]);
+
   return (
     <BrowserRouter>
-      {/* <Navbar user={user} /> */}
       <Routes>
         <Route
           path="/"
@@ -41,11 +70,32 @@ function App() {
         />
         <Route
           path="/dashboard"
-          element={user ? <Dashboard user={user} /> : <Navigate to="/" />}
+          element={
+            user ? (
+              <Dashboard
+                user={user}
+                account={account}
+                transactions={transactions}
+                setAccount={setAccount}
+              />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
         />
         <Route
-          path="/random"
-          element={user ? <Random user={user} /> : <Navigate to="/" />}
+          path="/transactions"
+          element={
+            user ? (
+              <Transactions
+                user={user}
+                account={account}
+                transactions={transactions}
+              />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
         />
       </Routes>
     </BrowserRouter>

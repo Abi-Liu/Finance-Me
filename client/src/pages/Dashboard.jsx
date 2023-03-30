@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Transactions from "../components/Transactions";
+import Transactions from "./Transactions";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import axios from "axios";
@@ -8,21 +8,35 @@ import { Container, Box, Button, AppBar, Stack } from "@mui/material";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
-const Dashboard = ({ user }) => {
+const Dashboard = ({ user, account, transactions, setAccount }) => {
   const [linkToken, setLinkToken] = useState();
-  const [account, setAccount] = useState();
-  useEffect(() => {
-    let ignore = false;
+  // const [account, setAccount] = useState();
+  // const [transactions, setTransactions] = useState([]);
 
-    async function fetchAccounts() {
-      const accounts = await axios.get(`/api/accounts/${user._id}`);
-      if (!ignore) {
-        setAccount(accounts.data);
-      }
-    }
-    fetchAccounts();
-    return () => (ignore = true);
-  }, []);
+  // useEffect(() => {
+  //   let ignore = false;
+
+  //   async function fetchAccounts() {
+  //     const accounts = await axios.get(`/api/accounts/${user._id}`);
+  //     if (!ignore) {
+  //       setAccount(accounts.data);
+  //     }
+  //   }
+  //   fetchAccounts();
+  //   return () => (ignore = true);
+  // }, []);
+
+  // useEffect(() => {
+  //   let ignore = false;
+  //   async function fetchTransactions() {
+  //     const response = await axios.post("/api/transactions", { account });
+  //     if (!ignore) {
+  //       setTransactions(response.data);
+  //     }
+  //   }
+  //   fetchTransactions();
+  //   return () => (ignore = true);
+  // }, [account]);
 
   //creating link token to plaid api
   useEffect(() => {
@@ -69,7 +83,7 @@ const Dashboard = ({ user }) => {
           Connect a bank account
         </Button>
         {account ? (
-          <Transactions user={user} account={account} />
+          <h4>Graphs</h4>
         ) : (
           <h3>Link a Bank Account to Get Started</h3>
         )}

@@ -87,7 +87,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-const Sidebar = ({ user, history }) => {
+const Sidebar = ({ user }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -114,7 +114,7 @@ const Sidebar = ({ user, history }) => {
     {
       text: "Transactions",
       icon: <AttachMoney />,
-      click: () => navigate("/random"),
+      click: () => navigate("/transactions"),
     },
     { text: "Logout", icon: <Logout />, click: logout },
   ];
