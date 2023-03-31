@@ -66,13 +66,13 @@ function App() {
         date: transaction.date,
         category: transaction.category[0],
         name: transaction.name,
-        amount: transaction.amount,
+        amount: Math.abs(transaction.amount),
       });
     });
   });
 
   data.sort((a, b) => (b.date > a.date ? 1 : -1));
-
+  console.log(data);
   return (
     <BrowserRouter>
       <Routes>

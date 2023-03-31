@@ -50,7 +50,7 @@ const Transactions = ({ user, account, transactions, data }) => {
               You have {total} transactions from your {transactions.length} bank{" "}
               {transactions.length === 1 ? "account" : "accounts"}
             </Typography>
-            <Table transactions={data} />
+            <Table data={data} />
           </Box>
         ) : (
           <h4>Fetching transactions</h4>

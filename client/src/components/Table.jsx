@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import MaterialReactTable from "material-react-table";
 import { Container } from "@mui/material";
 
-const Table = ({ transactions }) => {
+const Table = ({ data }) => {
   // let data = [];
   // transactions.forEach((account) => {
   //   account.transactions.forEach((transaction) => {
@@ -44,7 +44,7 @@ const Table = ({ transactions }) => {
     []
   );
 
-  return <MaterialReactTable columns={columns} data={transactions} />;
+  return <MaterialReactTable columns={columns} data={data} />;
 };
 
 export default Table;

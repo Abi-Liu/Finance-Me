@@ -115,6 +115,7 @@ module.exports = {
           end_date: today,
         };
         const res = await plaidClient.transactionsGet(req);
+        console.log(res.data.transactions);
         transactions.push({
           accountName: institutionName,
           transactions: res.data.transactions,
@@ -124,7 +125,6 @@ module.exports = {
       // requests is an array of promises. Wait for all of them to complete:
       await Promise.all(requests);
       response.json(transactions);
-      console.log(transactions);
       // transactions is now full.
 
       // items.forEach((item) => {
