@@ -41,9 +41,9 @@ const Transactions = ({ user, account, transactions, data }) => {
   }
 
   return (
-    <Container>
+    <Box mt={5} sx={{ background: "#F5F5F5" }}>
       <Sidebar user={user} />
-      <Box mt={5}>
+      <Container>
         {transactions.length !== 0 ? (
           <Box>
             <Typography sx={{ mb: 5 }} variant="h4">
@@ -55,8 +55,8 @@ const Transactions = ({ user, account, transactions, data }) => {
         ) : (
           <h4>Fetching transactions</h4>
         )}
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 

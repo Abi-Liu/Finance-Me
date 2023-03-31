@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import Sidebar from "../components/Sidebar";
+import BalanceCard from "../components/BalanceCard";
 import axios from "axios";
 import { usePlaidLink } from "react-plaid-link";
 import { Container, Box, Button, Stack } from "@mui/material";
@@ -137,18 +138,22 @@ const Dashboard = ({ user, account, transactions, setAccount }) => {
                 data={pieData}
                 options={pieOptions}
                 width={"100%"}
-                height={"450px"}
+                height={"400px"}
               />
               <Chart
                 chartType="ColumnChart"
                 width="100%"
-                height="450px"
+                height="400px"
                 data={barData}
                 options={barOptions}
               />
             </Stack>
 
-            <Box></Box>
+            <Box pb={3}>
+              <BalanceCard />
+              <BalanceCard />
+              <BalanceCard />
+            </Box>
           </Box>
         ) : (
           <h3>Link a Bank Account to Get Started</h3>

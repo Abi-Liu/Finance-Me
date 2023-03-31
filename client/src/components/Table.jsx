@@ -44,7 +44,9 @@ const Table = ({ data }) => {
     []
   );
 
-  return <MaterialReactTable columns={columns} data={data} />;
+  return (
+    <MaterialReactTable columns={columns} data={data} title="transactions" />
+  );
 };
 
 export default Table;
