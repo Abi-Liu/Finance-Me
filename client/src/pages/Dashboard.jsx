@@ -39,11 +39,6 @@ const Dashboard = ({ user, account, transactions, setAccount }) => {
 
   //creating link token to plaid api
 
-  const options = {
-    title: "Distribution",
-    legend: "bottom",
-  };
-
   useEffect(() => {
     let ignore = false;
 
@@ -91,33 +86,75 @@ const Dashboard = ({ user, account, transactions, setAccount }) => {
   }
 
   //Converting the map object into an Array for the chart to read and adding a heading to the beginning of the array.
-  let chartData = Object.entries(map);
-  chartData.unshift(["Category", "Amount"]);
+  let pieData = Object.entries(map);
+  pieData.unshift(["Category", "Amount"]);
+
+  let barData = [];
+  barData.push(Object.keys(map));
+  barData.push(Object.values(map));
+  barData[0].unshift("Category");
+  barData[1].unshift("Amount per Category");
+
+  console.log(barData);
+  console.log(pieData);
+
+  const pieOptions = {
+    title: "Distribution",
+    legend: "left",
+    backgroundColor: "#f5f5f5",
+    colors: ["#1BA1B8", "#2AA549", "#DF3745", "#F87B00", "#FCC00F", "#147EFB"],
+  };
+
+  const barOptions = {
+    title: "Spending",
+    chartArea: { backgroundColor: "#f5f5f5" },
+    legend: "right",
+    bar: { groupWidth: "100%" },
+    colors: ["#1BA1B8", "#2AA549", "#DF3745", "#F87B00", "#FCC00F", "#147EFB"],
+    backgroundColor: "#f5f5f5",
+  };
 
   return (
-    <Container>
-      <Sidebar user={user} />
-      <Box sx={{ mb: 5 }}>
-        <Button variant="contained" onClick={() => open()} disabled={!ready}>
-          Connect a bank account
-        </Button>
-        <Stack direction="horizontal">
-          <Chart
-            chartType="PieChart"
-            data={chartData}
-            options={options}
-            width={"100%"}
-            height={"400px"}
-          />
-          <h1>hi</h1>
+    <Box sx={{ height: "100vh", overflow: "auto", background: "#F5F5F5" }}>
+      <Container>
+        <Sidebar user={user} />
+        <Stack justifyContent="center" alignItems="end">
+          <Button
+            sx={{ width: "fit-content" }}
+            variant="contained"
+            onClick={() => open()}
+            disabled={!ready}
+          >
+            Connect a bank account
+          </Button>
         </Stack>
+
         {account ? (
-          <h4>Graphs</h4>
+          <Box>
+            <Stack direction="row" alignItems="center" justifyContent="center">
+              <Chart
+                chartType="PieChart"
+                data={pieData}
+                options={pieOptions}
+                width={"100%"}
+                height={"450px"}
+              />
+              <Chart
+                chartType="ColumnChart"
+                width="100%"
+                height="450px"
+                data={barData}
+                options={barOptions}
+              />
+            </Stack>
+
+            <Box></Box>
+          </Box>
         ) : (
           <h3>Link a Bank Account to Get Started</h3>
         )}
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 

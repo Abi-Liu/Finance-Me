@@ -72,7 +72,7 @@ function App() {
   });
 
   data.sort((a, b) => (b.date > a.date ? 1 : -1));
-  console.log(data);
+
   return (
     <BrowserRouter>
       <Routes>

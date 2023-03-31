@@ -121,10 +121,14 @@ const Sidebar = ({ user }) => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar elevation={1} position="fixed" open={open}>
+      <AppBar
+        sx={{ background: "#FCFCFC" }}
+        elevation={1}
+        position="fixed"
+        open={open}
+      >
         <Toolbar
           sx={{
-            background: "#FCFCFC",
             display: "flex",
             justifyContent: "space-between",
           }}
