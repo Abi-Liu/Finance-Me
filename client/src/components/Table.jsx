@@ -47,7 +47,7 @@ const Table = ({ data }) => {
   return (
     <Box>
       <Typography variant="h6">Transactions</Typography>
-      <MaterialReactTable columns={columns} data={data} title="transactions" />
+      <MaterialReactTable columns={columns} data={data} />
     </Box>
   );
 };

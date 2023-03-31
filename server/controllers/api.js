@@ -141,18 +141,20 @@ module.exports = {
 
       let accounts = [];
       const requests = items.map(async (item) => {
-        let { accessToken } = item;
+        let { accessToken, institutionName } = item;
         const req = {
           access_token: accessToken,
         };
         const res = await plaidClient.accountsBalanceGet(req);
         accounts.push({
+          bank: institutionName,
           accountName: res.data.accounts[0].name,
           balance: res.data.accounts[0].balances,
           type: res.data.accounts[0].type,
         });
       });
       await Promise.all(requests);
+
       response.json(accounts);
     } catch (err) {
       response.status(500).json({ message: "Failed to get balance" });

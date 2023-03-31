@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Spinner from "../components/common/Spinner";
 import Sidebar from "../components/Sidebar";
 import axios from "axios";
 import Table from "../components/Table";
@@ -53,7 +54,7 @@ const Transactions = ({ user, account, transactions, data }) => {
             <Table data={data} />
           </Box>
         ) : (
-          <h4>Fetching transactions</h4>
+          <Spinner />
         )}
       </Container>
     </Box>

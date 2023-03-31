@@ -13,6 +13,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [account, setAccount] = useState();
+  const [balance, setBalance] = useState();
 
   useEffect(() => {
     const getUser = async () => {
@@ -52,6 +53,15 @@ function App() {
       }
     }
     fetchTransactions();
+
+    async function fetchBalance() {
+      const response = await axios.post("/api/balance", { account });
+      if (!ignore) {
+        setBalance(response.data);
+      }
+    }
+    fetchBalance();
+
     return () => (ignore = true);
   }, [account]);
 
@@ -90,6 +100,7 @@ function App() {
                 user={user}
                 account={account}
                 transactions={data}
+                balance={balance}
                 setAccount={setAccount}
               />
             ) : (

@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import Sidebar from "../components/Sidebar";
 import BalanceCard from "../components/BalanceCard";
+import Spinner from "../components/common/Spinner";
 import axios from "axios";
 import { usePlaidLink } from "react-plaid-link";
-import { Container, Box, Button, Stack } from "@mui/material";
+import { Container, Box, Button, Stack, Typography } from "@mui/material";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
-const Dashboard = ({ user, account, transactions, setAccount }) => {
+const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
   const [linkToken, setLinkToken] = useState();
-  const [balance, setBalance] = useState();
   // const [account, setAccount] = useState();
   // const [transactions, setTransactions] = useState([]);
 
@@ -58,20 +58,6 @@ const Dashboard = ({ user, account, transactions, setAccount }) => {
     return () => (ignore = true);
   }, [account]);
 
-  useEffect(() => {
-    let ignore = false;
-
-    async function fetchBalance() {
-      const response = await axios.post("/api/balance", { account });
-      if (!ignore) {
-        setBalance(response);
-      }
-    }
-    fetchBalance();
-
-    return () => (ignore = true);
-  }, [account]);
-
   const { open, ready } = usePlaidLink({
     token: linkToken,
     onSuccess: (public_token, metadata) => {
@@ -115,7 +101,17 @@ const Dashboard = ({ user, account, transactions, setAccount }) => {
     title: "Distribution",
     legend: "left",
     backgroundColor: "#f5f5f5",
-    colors: ["#1BA1B8", "#2AA549", "#DF3745", "#F87B00", "#FCC00F", "#147EFB"],
+    colors: [
+      "#00CDA9",
+      "#FFCA00",
+      "#C2B7FE",
+      "#FF9A99",
+      "#FFAC61",
+      "#7EF8C3",
+      "#20ACF6",
+      "#1D8381",
+      "#8974FF",
+    ],
   };
 
   const barOptions = {
@@ -123,26 +119,49 @@ const Dashboard = ({ user, account, transactions, setAccount }) => {
     chartArea: { backgroundColor: "#f5f5f5" },
     legend: "right",
     bar: { groupWidth: "100%" },
-    colors: ["#1BA1B8", "#2AA549", "#DF3745", "#F87B00", "#FCC00F", "#147EFB"],
+    colors: [
+      "#00CDA9",
+      "#FFCA00",
+      "#C2B7FE",
+      "#FF9A99",
+      "#FFAC61",
+      "#7EF8C3",
+      "#20ACF6",
+      "#1D8381",
+      "#8974FF",
+    ],
     backgroundColor: "#f5f5f5",
   };
+  console.log(balance);
 
   return (
     <Box sx={{ height: "100vh", overflow: "auto", background: "#F5F5F5" }}>
-      <Container>
-        <Sidebar user={user} />
-        <Stack justifyContent="center" alignItems="end">
-          <Button
-            sx={{ width: "fit-content" }}
-            variant="contained"
-            onClick={() => open()}
-            disabled={!ready}
+      {!account ? (
+        <h3>Link a Bank Account to Get Started</h3>
+      ) : !balance ? (
+        <Spinner />
+      ) : (
+        <Container>
+          <Sidebar user={user} />
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            Connect a bank account
-          </Button>
-        </Stack>
+            {/* <Stack>
+            <Typography variant="h4">Hello, {user.firstName}</Typography>
+            <Typography variant="subtitle1">Welcome to FinanceMe</Typography>
+          </Stack> */}
+            <Button
+              sx={{ width: "fit-content", background: "#237EE9" }}
+              variant="contained"
+              onClick={() => open()}
+              disabled={!ready}
+            >
+              Connect a bank account
+            </Button>
+          </Stack>
 
-        {account ? (
           <Box>
             <Stack direction="row" alignItems="center" justifyContent="center">
               <Chart
@@ -161,16 +180,27 @@ const Dashboard = ({ user, account, transactions, setAccount }) => {
               />
             </Stack>
 
-            <Box pb={3}>
-              <BalanceCard />
-              <BalanceCard />
-              <BalanceCard />
+            <Box
+              pb={3}
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 2,
+              }}
+            >
+              {balance.map((item) => (
+                <BalanceCard
+                  bank={item.bank}
+                  accountName={item.accountName}
+                  availableBalance={item.balance.available}
+                  currentBalance={item.balance.current}
+                  type={item.type}
+                />
+              ))}
             </Box>
           </Box>
-        ) : (
-          <h3>Link a Bank Account to Get Started</h3>
-        )}
-      </Container>
+        </Container>
+      )}
     </Box>
   );
 };
