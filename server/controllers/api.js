@@ -24,7 +24,7 @@ module.exports = {
         client_user_id: clientUserId,
       },
       client_name: "Plaid Test App",
-      products: ["transactions", "auth"],
+      products: ["transactions"],
       language: "en",
       redirect_uri: "http://localhost:5173/",
       country_codes: ["US"],
@@ -49,7 +49,6 @@ module.exports = {
       // These values should be saved to a persistent database and
       // associated with the currently signed-in user
       const { access_token, item_id } = plaidResponse.data;
-
       let account = await Account.findOne({
         userId: id,
         institutionId: institution_id,
@@ -87,18 +86,6 @@ module.exports = {
       response.status(500).json({ message: err });
     }
   },
-  auth: async (request, response) => {
-    try {
-      const access_token = request.body.access_token;
-      const plaidRequest = {
-        access_token: access_token,
-      };
-      const plaidResponse = await plaidClient.authGet(plaidRequest);
-      response.json(plaidResponse.data);
-    } catch (e) {
-      response.status(500).send("failed");
-    }
-  },
   transactions: async (request, response) => {
     try {
       const now = moment();
@@ -115,7 +102,6 @@ module.exports = {
           end_date: today,
         };
         const res = await plaidClient.transactionsGet(req);
-        console.log(res.data.transactions);
         transactions.push({
           accountName: institutionName,
           transactions: res.data.transactions,
@@ -147,6 +133,29 @@ module.exports = {
       // });
     } catch (err) {
       response.status(500).json({ message: "Could not fetch transaction" });
+    }
+  },
+  balance: async (request, response) => {
+    try {
+      const items = request.body.account;
+
+      let accounts = [];
+      const requests = items.map(async (item) => {
+        let { accessToken } = item;
+        const req = {
+          access_token: accessToken,
+        };
+        const res = await plaidClient.accountsBalanceGet(req);
+        accounts.push({
+          accountName: res.data.accounts[0].name,
+          balance: res.data.accounts[0].balances,
+          type: res.data.accounts[0].type,
+        });
+      });
+      await Promise.all(requests);
+      response.json(accounts);
+    } catch (err) {
+      response.status(500).json({ message: "Failed to get balance" });
     }
   },
 };

@@ -10,6 +10,7 @@ axios.defaults.baseURL = "http://localhost:8000";
 
 const Dashboard = ({ user, account, transactions, setAccount }) => {
   const [linkToken, setLinkToken] = useState();
+  const [balance, setBalance] = useState();
   // const [account, setAccount] = useState();
   // const [transactions, setTransactions] = useState([]);
 
@@ -57,6 +58,20 @@ const Dashboard = ({ user, account, transactions, setAccount }) => {
     return () => (ignore = true);
   }, [account]);
 
+  useEffect(() => {
+    let ignore = false;
+
+    async function fetchBalance() {
+      const response = await axios.post("/api/balance", { account });
+      if (!ignore) {
+        setBalance(response);
+      }
+    }
+    fetchBalance();
+
+    return () => (ignore = true);
+  }, [account]);
+
   const { open, ready } = usePlaidLink({
     token: linkToken,
     onSuccess: (public_token, metadata) => {
@@ -95,9 +110,6 @@ const Dashboard = ({ user, account, transactions, setAccount }) => {
   barData.push(Object.values(map));
   barData[0].unshift("Category");
   barData[1].unshift("Amount per Category");
-
-  console.log(barData);
-  console.log(pieData);
 
   const pieOptions = {
     title: "Distribution",

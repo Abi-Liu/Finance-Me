@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Link, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import axios from "axios";
 
-import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import Random from "./pages/Transactions";
 import Transactions from "./pages/Transactions";
 
 axios.defaults.baseURL = "http://localhost:8000";

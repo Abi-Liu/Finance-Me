@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import MaterialReactTable from "material-react-table";
-import { Container } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const Table = ({ data }) => {
   // let data = [];
@@ -45,7 +45,10 @@ const Table = ({ data }) => {
   );
 
   return (
-    <MaterialReactTable columns={columns} data={data} title="transactions" />
+    <Box>
+      <Typography variant="h6">Transactions</Typography>
+      <MaterialReactTable columns={columns} data={data} title="transactions" />
+    </Box>
   );
 };
 
