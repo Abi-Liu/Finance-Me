@@ -138,7 +138,6 @@ module.exports = {
   balance: async (request, response) => {
     try {
       const items = request.body.account;
-      console.log(items);
       let accounts = [];
       const requests = items.map(async (item) => {
         let { _id, accessToken, institutionName } = item;
