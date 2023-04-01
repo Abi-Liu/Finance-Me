@@ -186,7 +186,22 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
               justifyContent="end"
               alignItems="center"
               sx={{ pb: 5 }}
-            ></Stack>
+            >
+              <Button
+                sx={{
+                  width: "fit-content",
+                  background: "#237EE9",
+                  padding: "10px 15px",
+                  gap: "10px",
+                }}
+                variant="contained"
+                onClick={() => open()}
+                disabled={!ready}
+              >
+                <Add />
+                Add an Account
+              </Button>
+            </Stack>
             <Container>
               <Grid container spacing={5}>
                 {balance.map((item) => (
