@@ -135,13 +135,35 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
 
   return (
     <Box sx={{ height: "100vh", overflow: "auto", background: "#F5F5F5" }}>
-      {!account ? (
-        <h3>Link a Bank Account to Get Started</h3>
-      ) : !balance ? (
+      <Sidebar user={user} />
+      {account.length === 0 ? (
+        <Container
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <h3>Link a bank account to get started!</h3>
+          <Button
+            sx={{
+              width: "fit-content",
+              background: "#237EE9",
+              padding: "10px 15px",
+              gap: "10px",
+            }}
+            variant="contained"
+            onClick={() => open()}
+            disabled={!ready}
+          >
+            <Add />
+            Add an Account
+          </Button>
+        </Container>
+      ) : balance.length === 0 ? (
         <Spinner />
       ) : (
         <Container>
-          <Sidebar user={user} />
           <Box mb={5}>
             <Stack direction="row" alignItems="center" justifyContent="center">
               <Chart
@@ -164,22 +186,7 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
               justifyContent="end"
               alignItems="center"
               sx={{ pb: 5 }}
-            >
-              <Button
-                sx={{
-                  width: "fit-content",
-                  background: "#237EE9",
-                  padding: "10px 15px",
-                  gap: "10px",
-                }}
-                variant="contained"
-                onClick={() => open()}
-                disabled={!ready}
-              >
-                <Add />
-                Add an Account
-              </Button>
-            </Stack>
+            ></Stack>
             <Container>
               <Grid container spacing={5}>
                 {balance.map((item) => (

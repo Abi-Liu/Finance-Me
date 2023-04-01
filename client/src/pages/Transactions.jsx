@@ -40,9 +40,9 @@ const Transactions = ({ user, account, transactions, data }) => {
   if (transactions) {
     total = transactions.reduce((acc, x) => acc + x.totalTransactions, 0);
   }
-
+  console.log(transactions);
   return (
-    <Box mt={5} sx={{ background: "#F5F5F5" }}>
+    <Box mt={5} sx={{ height: "100vh", background: "#F5F5F5" }}>
       <Sidebar user={user} />
       <Container>
         {transactions.length !== 0 ? (

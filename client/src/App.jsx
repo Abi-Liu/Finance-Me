@@ -12,8 +12,8 @@ axios.defaults.baseURL = "http://localhost:8000";
 function App() {
   const [user, setUser] = useState(null);
   const [transactions, setTransactions] = useState([]);
-  const [account, setAccount] = useState();
-  const [balance, setBalance] = useState();
+  const [account, setAccount] = useState([]);
+  const [balance, setBalance] = useState([]);
 
   useEffect(() => {
     const getUser = async () => {
