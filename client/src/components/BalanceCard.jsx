@@ -1,13 +1,19 @@
 import React from "react";
+import axios from "axios";
 import {
   Typography,
   Card,
   CardContent,
   CardHeader,
   Stack,
+  Grid,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+
+axios.defaults.baseURL = "http://localhost:8000";
 
 const BalanceCard = ({
   bank,
@@ -15,34 +21,90 @@ const BalanceCard = ({
   availableBalance,
   currentBalance,
   type,
+  setAccount,
+  id,
 }) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  async function deleteAccount() {
+    await axios.delete(`/api/account/${id}`);
+
+    setAccount((prev) => {
+      return prev.filter((account) => account._id !== id);
+    });
+  }
+
   return (
-    <Card
-      sx={{
-        maxWidth: "300px",
-        minWidth: "300px",
-        padding: "10px",
-      }}
-    >
-      <CardContent>
+    <Grid item xs={12} md={4}>
+      <Card
+        sx={{
+          maxWidth: "320px",
+          minWidth: "320px",
+          padding: "10px",
+        }}
+      >
         <CardHeader
           sx={{
-            background: "#063D42",
+            background: "#0b95a2",
             color: "#FFFFFF",
           }}
           action={
-            <IconButton aria-label="settings">
+            <IconButton
+              aria-label="settings"
+              id="long-button"
+              aria-controls={open ? "long-menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              aria-haspopup="true"
+              onClick={handleClick}
+            >
               <MoreVertIcon sx={{ color: "#FFFFFF" }} />
             </IconButton>
           }
           title={bank}
         />
-        <Typography variant="h6">{accountName}</Typography>
-        <Typography variant="subtitle1">{type}</Typography>
-        <Typography variant="subtitle1">{availableBalance}</Typography>
-        <Typography variant="subtitle1">{currentBalance}</Typography>
-      </CardContent>
-    </Card>
+        <Menu
+          id="long-menu"
+          MenuListProps={{
+            "aria-labelledby": "long-button",
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            style: {
+              maxHeight: 48,
+              width: "20ch",
+            },
+          }}
+        >
+          <MenuItem onClick={deleteAccount}>Delete Account</MenuItem>
+        </Menu>
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            gap: "10px",
+            paddingX: "5px",
+          }}
+        >
+          <Stack direction="column" alignItems="start" justifyContent="start">
+            <Typography variant="h6">{accountName}</Typography>
+          </Stack>
+          <Stack justifyContent="end" alignItems="center">
+            <Typography variant="h6">${availableBalance}</Typography>
+            <Typography variant="caption">Available Balance:</Typography>
+          </Stack>
+        </CardContent>
+      </Card>
+    </Grid>
   );
 };
 

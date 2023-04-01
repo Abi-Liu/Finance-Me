@@ -5,7 +5,8 @@ import BalanceCard from "../components/BalanceCard";
 import Spinner from "../components/common/Spinner";
 import axios from "axios";
 import { usePlaidLink } from "react-plaid-link";
-import { Container, Box, Button, Stack, Typography } from "@mui/material";
+import { Container, Box, Button, Stack, Grid } from "@mui/material";
+import { Add } from "@mui/icons-material";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
@@ -50,7 +51,6 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
       });
       if (!ignore) {
         setLinkToken(response.data.link_token);
-        console.log(response);
       }
     }
     fetch();
@@ -132,7 +132,6 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
     ],
     backgroundColor: "#f5f5f5",
   };
-  console.log(balance);
 
   return (
     <Box sx={{ height: "100vh", overflow: "auto", background: "#F5F5F5" }}>
@@ -143,26 +142,7 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
       ) : (
         <Container>
           <Sidebar user={user} />
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            {/* <Stack>
-            <Typography variant="h4">Hello, {user.firstName}</Typography>
-            <Typography variant="subtitle1">Welcome to FinanceMe</Typography>
-          </Stack> */}
-            <Button
-              sx={{ width: "fit-content", background: "#237EE9" }}
-              variant="contained"
-              onClick={() => open()}
-              disabled={!ready}
-            >
-              Connect a bank account
-            </Button>
-          </Stack>
-
-          <Box>
+          <Box mb={5}>
             <Stack direction="row" alignItems="center" justifyContent="center">
               <Chart
                 chartType="PieChart"
@@ -179,25 +159,43 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
                 options={barOptions}
               />
             </Stack>
-
-            <Box
-              pb={3}
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 2,
-              }}
+            <Stack
+              direction="row"
+              justifyContent="end"
+              alignItems="center"
+              sx={{ pb: 5 }}
             >
-              {balance.map((item) => (
-                <BalanceCard
-                  bank={item.bank}
-                  accountName={item.accountName}
-                  availableBalance={item.balance.available}
-                  currentBalance={item.balance.current}
-                  type={item.type}
-                />
-              ))}
-            </Box>
+              <Button
+                sx={{
+                  width: "fit-content",
+                  background: "#237EE9",
+                  padding: "10px 15px",
+                  gap: "10px",
+                }}
+                variant="contained"
+                onClick={() => open()}
+                disabled={!ready}
+              >
+                <Add />
+                Add an Account
+              </Button>
+            </Stack>
+            <Container>
+              <Grid container spacing={5}>
+                {balance.map((item) => (
+                  <BalanceCard
+                    key={item.id}
+                    id={item.id}
+                    bank={item.bank}
+                    accountName={item.accountName}
+                    availableBalance={item.balance.available}
+                    currentBalance={item.balance.current}
+                    type={item.type}
+                    setAccount={setAccount}
+                  />
+                ))}
+              </Grid>
+            </Container>
           </Box>
         </Container>
       )}

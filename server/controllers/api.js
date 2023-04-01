@@ -71,7 +71,7 @@ module.exports = {
   },
   deleteAccount: async (request, response) => {
     try {
-      await Account.remove({ _id: request.params.id });
+      await Account.deleteOne({ _id: request.params.id });
       response.json({ message: "Successfully deleted" });
     } catch (err) {
       console.log(err);
@@ -138,15 +138,16 @@ module.exports = {
   balance: async (request, response) => {
     try {
       const items = request.body.account;
-
+      console.log(items);
       let accounts = [];
       const requests = items.map(async (item) => {
-        let { accessToken, institutionName } = item;
+        let { _id, accessToken, institutionName } = item;
         const req = {
           access_token: accessToken,
         };
         const res = await plaidClient.accountsBalanceGet(req);
         accounts.push({
+          id: _id,
           bank: institutionName,
           accountName: res.data.accounts[0].name,
           balance: res.data.accounts[0].balances,
