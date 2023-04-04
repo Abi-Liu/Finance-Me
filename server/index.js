@@ -40,6 +40,6 @@ app.use(passport.session());
 app.use("/auth", authRoutes);
 app.use("/api", apiRoutes);
 
-app.listen(8000, () => {
+app.listen(process.env.PORT, () => {
   console.log("server has started");
 });
