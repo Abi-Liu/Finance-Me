@@ -5,7 +5,7 @@ import axios from "axios";
 import Table from "../components/Table";
 import { Box, Typography, Container } from "@mui/material";
 
-axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
+axios.defaults.baseURL = "http://localhost:8000";
 
 const Transactions = ({ user, account, transactions, data }) => {
   // const [transactions, setTransactions] = useState([]);

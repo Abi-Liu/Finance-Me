@@ -100,7 +100,7 @@ const Sidebar = ({ user }) => {
   };
 
   async function logout() {
-    window.open("https://financeme-rwlo.onrender.com/auth/logout", "_self");
+    window.open("http://localhost:8000/auth/logout", "_self");
   }
 
   const navigate = useNavigate();

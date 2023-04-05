@@ -7,7 +7,8 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Transactions from "./pages/Transactions";
 
-axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
+// axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
+axios.defaults.baseURL = "http://localhost:8000";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -32,15 +33,16 @@ function App() {
   //Get accounts linked to user
   useEffect(() => {
     let ignore = false;
-
     async function fetchAccounts() {
       const accounts = await axios.get(`/api/accounts/${user._id}`);
       if (!ignore) {
         setAccount(accounts.data);
       }
     }
-    fetchAccounts();
-    return () => (ignore = true);
+    if (user) {
+      fetchAccounts();
+      return () => (ignore = true);
+    }
   }, [user]);
 
   //Get transactions linked to user's bank accounts
