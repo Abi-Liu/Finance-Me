@@ -3,7 +3,7 @@ import logo from "../assets/Financeme.png";
 
 const Home = () => {
   function google() {
-    window.open("http://localhost:8000/auth/google", "_self");
+    window.open("https://financeme-rwlo.onrender.com/auth/google", "_self");
   }
 
   return (

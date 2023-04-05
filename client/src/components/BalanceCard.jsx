@@ -13,7 +13,7 @@ import {
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
 
 const BalanceCard = ({
   bank,

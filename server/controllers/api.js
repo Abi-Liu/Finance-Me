@@ -23,10 +23,10 @@ module.exports = {
       user: {
         client_user_id: clientUserId,
       },
-      client_name: "Plaid Test App",
+      client_name: "FinanceMe",
       products: ["transactions"],
       language: "en",
-      redirect_uri: "http://localhost:5173/",
+      redirect_uri: "https://finance-me.netlify.app/",
       country_codes: ["US"],
     };
     try {

@@ -8,7 +8,7 @@ import { usePlaidLink } from "react-plaid-link";
 import { Container, Box, Button, Stack, Grid } from "@mui/material";
 import { Add } from "@mui/icons-material";
 
-axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
 
 const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
   const [linkToken, setLinkToken] = useState();

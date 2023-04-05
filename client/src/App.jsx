@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Transactions from "./pages/Transactions";
 
-axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
 
 function App() {
   const [user, setUser] = useState(null);
