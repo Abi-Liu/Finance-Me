@@ -11,6 +11,8 @@ router.get("/login/success", (req, res) => {
       user: req.user,
       //   cookies: req.cookies
     });
+  } else {
+    res.status(500).json({ message: "Failed" });
   }
 });
 
