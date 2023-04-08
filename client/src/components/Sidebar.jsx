@@ -18,7 +18,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { Dashboard, Logout, AttachMoney } from "@mui/icons-material";
-import logo from "../assets/Logo.png";
+// import logo from "../assets/Logo.png";
 
 const drawerWidth = 220;
 
@@ -146,7 +146,7 @@ const Sidebar = ({ user }) => {
             >
               <MenuIcon />
             </IconButton>
-            <img className="logo-small" src={logo} alt="" />
+            {/* <img className="logo-small" src={logo} alt="" /> */}
           </Stack>
           <Stack
             direction="row"
