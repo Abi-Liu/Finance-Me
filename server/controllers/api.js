@@ -26,7 +26,7 @@ module.exports = {
       client_name: "FinanceMe",
       products: ["transactions"],
       language: "en",
-      redirect_uri: "https://finance-me.onrender.com/",
+      redirect_uri: "https://finance-me.netlify.app/",
       country_codes: ["US"],
     };
     try {

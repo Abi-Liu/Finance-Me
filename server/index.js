@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://finance-me.onrender.com",
+    origin: "https://finance-me.netlify.app",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
