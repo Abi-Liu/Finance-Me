@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Transactions from "./pages/Transactions";
 
-axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
+// axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await axios.get("/auth/login/success", {
+        const res = await axios.get("auth/login/success", {
           withCredentials: true,
         });
         setUser(res.data.user);
@@ -34,7 +34,7 @@ function App() {
     let ignore = false;
 
     async function fetchAccounts() {
-      const accounts = await axios.get(`/api/accounts/${user._id}`);
+      const accounts = await axios.get(`api/accounts/${user._id}`);
       if (!ignore) {
         setAccount(accounts.data);
       }
@@ -47,7 +47,7 @@ function App() {
   useEffect(() => {
     let ignore = false;
     async function fetchTransactions() {
-      const response = await axios.post("/api/transactions", { account });
+      const response = await axios.post("api/transactions", { account });
       if (!ignore) {
         setTransactions(response.data);
       }
@@ -55,7 +55,7 @@ function App() {
     fetchTransactions();
 
     async function fetchBalance() {
-      const response = await axios.post("/api/balance", { account });
+      const response = await axios.post("api/balance", { account });
       if (!ignore) {
         setBalance(response.data);
       }

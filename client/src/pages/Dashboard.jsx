@@ -8,7 +8,7 @@ import { usePlaidLink } from "react-plaid-link";
 import { Container, Box, Button, Stack, Grid } from "@mui/material";
 import { Add } from "@mui/icons-material";
 
-axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
+// axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
 
 const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
   const [linkToken, setLinkToken] = useState();
@@ -46,7 +46,7 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
     let ignore = false;
 
     async function fetch() {
-      const response = await axios.post("/api/create_link_token", {
+      const response = await axios.post("api/create_link_token", {
         id: user._id,
       });
       if (!ignore) {
@@ -63,7 +63,7 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
     onSuccess: (public_token, metadata) => {
       async function setData() {
         try {
-          let userAccount = await axios.post("/api/exchange_public_token", {
+          let userAccount = await axios.post("api/exchange_public_token", {
             public_token: public_token,
             id: user._id,
             metadata: metadata,
