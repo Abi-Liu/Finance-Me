@@ -33,7 +33,6 @@
   <p align="center">
     A full-stack applications where users can log in and connect their bank accounts using the Plaid API's secure connection. The transactional data is then visually presented through graphs as well as a filterable table containing all transaction data.
     <br />
-    <a href="https://github.com/Abi-Liu/Finance-Me"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/Abi-Liu/Finance-Me">View Demo</a>
