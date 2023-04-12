@@ -2,7 +2,7 @@ import React from "react";
 
 const Login = () => {
   function google() {
-    window.open("https://financeme-rwlo.onrender.com/auth/google", "_self");
+    window.open("http://localhost:8000/auth/google", "_self");
   }
 
   return (
