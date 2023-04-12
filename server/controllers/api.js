@@ -19,6 +19,7 @@ module.exports = {
   createLinkToken: async (request, response) => {
     //   Get the client_user_id by searching for the current user);
     const clientUserId = request.body.id;
+    console.log(clientUserId);
     const plaidRequest = {
       user: {
         client_user_id: clientUserId,
@@ -35,8 +36,8 @@ module.exports = {
       );
       response.json(createTokenResponse.data);
     } catch (error) {
+      console.error(error);
       response.status(500).send("failure");
-      // handle error
     }
   },
   exchangePublicToken: async (request, response) => {
