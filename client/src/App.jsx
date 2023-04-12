@@ -39,8 +39,10 @@ function App() {
         setAccount(accounts.data);
       }
     }
-    fetchAccounts();
-    return () => (ignore = true);
+    if (user) {
+      fetchAccounts();
+      return () => (ignore = true);
+    }
   }, [user]);
 
   //Get transactions linked to user's bank accounts
