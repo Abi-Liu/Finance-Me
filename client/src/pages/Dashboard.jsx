@@ -7,10 +7,19 @@ import axios from "axios";
 import { usePlaidLink } from "react-plaid-link";
 import { Container, Box, Button, Stack, Grid } from "@mui/material";
 import { Add } from "@mui/icons-material";
+import Selector from "../components/Selector";
 
 axios.defaults.baseURL = "http://localhost:8000";
 
-const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
+const Dashboard = ({
+  user,
+  account,
+  transactions,
+  balance,
+  setAccount,
+  month,
+  setMonth,
+}) => {
   const [linkToken, setLinkToken] = useState();
   // const [account, setAccount] = useState();
   // const [transactions, setTransactions] = useState([]);
@@ -164,6 +173,7 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
         <Spinner />
       ) : (
         <Container>
+          <Selector month={month} setMonth={setMonth} />
           <Box mb={5}>
             <Stack direction="row" alignItems="center" justifyContent="center">
               <Chart

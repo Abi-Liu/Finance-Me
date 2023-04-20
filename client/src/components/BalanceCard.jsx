@@ -99,8 +99,16 @@ const BalanceCard = ({
             <Typography variant="h6">{accountName}</Typography>
           </Stack>
           <Stack justifyContent="end" alignItems="center">
-            <Typography variant="h6">${availableBalance}</Typography>
-            <Typography variant="caption">Available Balance:</Typography>
+            {type === "depository" ? (
+              <Typography variant="h6">${availableBalance}</Typography>
+            ) : (
+              <Typography variant="h6">${currentBalance}</Typography>
+            )}
+            {type === "depository" ? (
+              <Typography variant="caption">Available Balance:</Typography>
+            ) : (
+              <Typography variant="caption">Current Balance:</Typography>
+            )}
           </Stack>
         </CardContent>
       </Card>
