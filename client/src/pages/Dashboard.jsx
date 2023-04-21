@@ -7,10 +7,19 @@ import axios from "axios";
 import { usePlaidLink } from "react-plaid-link";
 import { Container, Box, Button, Stack, Grid } from "@mui/material";
 import { Add } from "@mui/icons-material";
+import Selector from "../components/Selector";
 
 axios.defaults.baseURL = "https://financeme-rwlo.onrender.com";
 
-const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
+const Dashboard = ({
+  user,
+  account,
+  transactions,
+  balance,
+  setAccount,
+  month,
+  setMonth,
+}) => {
   const [linkToken, setLinkToken] = useState();
   // const [account, setAccount] = useState();
   // const [transactions, setTransactions] = useState([]);
@@ -139,8 +148,9 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
       {account.length === 0 ? (
         <Container
           sx={{
-            display: "flex",
+            display: { lg: "flex", md: "block" },
             justifyContent: "space-between",
+            ml: { md: "100px", xs: "50px" },
             alignItems: "center",
           }}
         >
@@ -151,6 +161,7 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
               background: "#237EE9",
               padding: "10px 15px",
               gap: "10px",
+              my: { sm: "25px", xs: "25px" },
             }}
             variant="contained"
             onClick={() => open()}
@@ -163,9 +174,16 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
       ) : balance.length === 0 ? (
         <Spinner />
       ) : (
-        <Container>
+        <Container fixed={true}>
+          <Box sx={{ display: "flex", justifyContent: "end" }}>
+            <Selector month={month} setMonth={setMonth} />
+          </Box>
           <Box mb={5}>
-            <Stack direction="row" alignItems="center" justifyContent="center">
+            <Stack
+              direction={{ md: "row", sm: "column" }}
+              alignItems="center"
+              justifyContent="center"
+            >
               <Chart
                 chartType="PieChart"
                 data={pieData}
@@ -202,8 +220,8 @@ const Dashboard = ({ user, account, transactions, balance, setAccount }) => {
                 Add an Account
               </Button>
             </Stack>
-            <Container>
-              <Grid container spacing={5}>
+            <Container sx={{ ml: { sm: "200px", md: "50px", lg: "0px" } }}>
+              <Grid container spacing={{ md: 2, lg: 4, xs: 2 }}>
                 {balance.map((item) => (
                   <BalanceCard
                     key={item.id}
