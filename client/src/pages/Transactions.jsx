@@ -47,10 +47,6 @@ const Transactions = ({ user, account, transactions, data }) => {
       <Container>
         {transactions.length !== 0 ? (
           <Box>
-            <Typography sx={{ mb: 5 }} variant="h4">
-              You have {total} transactions from your {transactions.length} bank{" "}
-              {transactions.length === 1 ? "account" : "accounts"}
-            </Typography>
             <Table data={data} />
           </Box>
         ) : (
