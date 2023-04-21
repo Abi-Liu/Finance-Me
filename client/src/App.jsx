@@ -14,6 +14,7 @@ function App() {
   const [transactions, setTransactions] = useState([]);
   const [account, setAccount] = useState([]);
   const [balance, setBalance] = useState([]);
+  const [month, setMonth] = useState(1);
 
   useEffect(() => {
     const getUser = async () => {
@@ -48,13 +49,6 @@ function App() {
   //Get transactions linked to user's bank accounts
   useEffect(() => {
     let ignore = false;
-    async function fetchTransactions() {
-      const response = await axios.post("/api/transactions", { account });
-      if (!ignore) {
-        setTransactions(response.data);
-      }
-    }
-    fetchTransactions();
 
     async function fetchBalance() {
       const response = await axios.post("/api/balance", { account });
@@ -66,6 +60,22 @@ function App() {
 
     return () => (ignore = true);
   }, [account]);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchTransactions() {
+      const response = await axios.post("/api/transactions", {
+        account,
+        month,
+      });
+      if (!ignore) {
+        setTransactions(response.data);
+      }
+    }
+    fetchTransactions();
+
+    return () => (ignore = true);
+  }, [month, account]);
 
   let data = [];
 
@@ -104,6 +114,8 @@ function App() {
                 transactions={data}
                 balance={balance}
                 setAccount={setAccount}
+                month={month}
+                setMonth={setMonth}
               />
             ) : (
               <Navigate to="/" />

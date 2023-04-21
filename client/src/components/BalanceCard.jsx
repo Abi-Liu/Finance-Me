@@ -45,8 +45,8 @@ const BalanceCard = ({
     <Grid item xs={12} md={4}>
       <Card
         sx={{
-          maxWidth: "320px",
-          minWidth: "320px",
+          maxWidth: { lg: "320px", md: "270px", sm: "320px" },
+          minWidth: { lg: "320px", md: "270px", sm: "320px" },
           padding: "10px",
         }}
       >
@@ -99,8 +99,16 @@ const BalanceCard = ({
             <Typography variant="h6">{accountName}</Typography>
           </Stack>
           <Stack justifyContent="end" alignItems="center">
-            <Typography variant="h6">${availableBalance}</Typography>
-            <Typography variant="caption">Available Balance:</Typography>
+            {type === "depository" ? (
+              <Typography variant="h6">${availableBalance}</Typography>
+            ) : (
+              <Typography variant="h6">${currentBalance}</Typography>
+            )}
+            {type === "depository" ? (
+              <Typography variant="caption">Available Balance:</Typography>
+            ) : (
+              <Typography variant="caption">Current Balance:</Typography>
+            )}
           </Stack>
         </CardContent>
       </Card>
