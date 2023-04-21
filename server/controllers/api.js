@@ -1,5 +1,4 @@
 const { Configuration, PlaidApi, PlaidEnvironments } = require("plaid");
-const User = require("../models/User");
 const Account = require("../models/Account");
 const moment = require("moment");
 
@@ -91,7 +90,9 @@ module.exports = {
     try {
       const now = moment();
       const today = now.format("YYYY-MM-DD");
-      const thirtyDaysAgo = now.subtract(30, "days").format("YYYY-MM-DD");
+      const thirtyDaysAgo = now
+        .subtract(30 * request.body.month, "days")
+        .format("YYYY-MM-DD");
       let transactions = [];
       const items = request.body.account;
       const requests = items.map(async (item) => {
@@ -146,12 +147,14 @@ module.exports = {
           access_token: accessToken,
         };
         const res = await plaidClient.accountsBalanceGet(req);
-        accounts.push({
-          id: _id,
-          bank: institutionName,
-          accountName: res.data.accounts[0].name,
-          balance: res.data.accounts[0].balances,
-          type: res.data.accounts[0].type,
+        res.data.accounts.forEach((account) => {
+          accounts.push({
+            id: _id,
+            bank: institutionName,
+            accountName: account.name,
+            balance: account.balances,
+            type: account.type,
+          });
         });
       });
       await Promise.all(requests);
