@@ -180,7 +180,7 @@ const Dashboard = ({
       ) : balance.length === 0 ? (
         <Spinner />
       ) : (
-        <Container>
+        <Container fixed={true}>
           <Box sx={{ display: "flex", justifyContent: "end" }}>
             <Selector month={month} setMonth={setMonth} />
           </Box>
