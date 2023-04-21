@@ -45,8 +45,8 @@ const BalanceCard = ({
     <Grid item xs={12} md={4}>
       <Card
         sx={{
-          maxWidth: "320px",
-          minWidth: "320px",
+          maxWidth: { lg: "320px", md: "270px", sm: "320px" },
+          minWidth: { lg: "320px", md: "270px", sm: "320px" },
           padding: "10px",
         }}
       >

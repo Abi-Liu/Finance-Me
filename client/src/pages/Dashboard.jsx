@@ -143,13 +143,20 @@ const Dashboard = ({
   };
 
   return (
-    <Box sx={{ height: "100vh", overflow: "auto", background: "#F5F5F5" }}>
+    <Box
+      sx={{
+        height: "100vh",
+        overflow: "auto",
+        background: "#F5F5F5",
+      }}
+    >
       <Sidebar user={user} />
       {account.length === 0 ? (
         <Container
           sx={{
-            display: "flex",
+            display: { lg: "flex", md: "block" },
             justifyContent: "space-between",
+            ml: { md: "100px", xs: "50px" },
             alignItems: "center",
           }}
         >
@@ -160,6 +167,7 @@ const Dashboard = ({
               background: "#237EE9",
               padding: "10px 15px",
               gap: "10px",
+              my: { sm: "25px", xs: "25px" },
             }}
             variant="contained"
             onClick={() => open()}
@@ -173,9 +181,15 @@ const Dashboard = ({
         <Spinner />
       ) : (
         <Container>
-          <Selector month={month} setMonth={setMonth} />
+          <Box sx={{ display: "flex", justifyContent: "end" }}>
+            <Selector month={month} setMonth={setMonth} />
+          </Box>
           <Box mb={5}>
-            <Stack direction="row" alignItems="center" justifyContent="center">
+            <Stack
+              direction={{ md: "row", sm: "column" }}
+              alignItems="center"
+              justifyContent="center"
+            >
               <Chart
                 chartType="PieChart"
                 data={pieData}
@@ -212,8 +226,8 @@ const Dashboard = ({
                 Add an Account
               </Button>
             </Stack>
-            <Container>
-              <Grid container spacing={5}>
+            <Container sx={{ ml: { sm: "200px", md: "50px", lg: "0px" } }}>
+              <Grid container spacing={{ md: 2, lg: 4, xs: 2 }}>
                 {balance.map((item) => (
                   <BalanceCard
                     key={item.id}
