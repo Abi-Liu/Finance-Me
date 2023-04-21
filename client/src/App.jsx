@@ -19,9 +19,12 @@ function App() {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await axios.get("/auth/login/success", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://finance-me.netlify.app/auth/login/success",
+          {
+            withCredentials: true,
+          }
+        );
         setUser(res.data.user);
       } catch (err) {
         console.log(err);
