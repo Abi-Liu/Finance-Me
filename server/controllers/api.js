@@ -133,7 +133,8 @@ module.exports = {
       //   });
       // });
     } catch (err) {
-      response.status(500).json({ message: "Could not fetch transaction" });
+      console.log(err);
+      response.status(500).json({ message: err });
     }
   },
   balance: async (request, response) => {
@@ -158,7 +159,8 @@ module.exports = {
 
       response.json(accounts);
     } catch (err) {
-      response.status(500).json({ message: "Failed to get balance" });
+      console.log(err);
+      response.status(500).json({ message: err });
     }
   },
 };
